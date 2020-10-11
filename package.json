@@ -1,0 +1,19 @@
+{
+  "name": "stonks",
+  "version": "1.0.0",
+  "description": "node.js based virtual stock market simulator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MurmuDev/stonks.git"
+  },
+  "author": "abinash murmu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MurmuDev/stonks/issues"
+  },
+  "homepage": "https://github.com/MurmuDev/stonks#readme"
+}
