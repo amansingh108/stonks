@@ -31,12 +31,26 @@ async function start(){
 
     asyncForEach(clist,(object,index,array)=>{
        //print live data here
-       console.log(object.name,object.value);
+       // console.log(object.name,object.value);
        array[index].value = nextVal(object.value);
     });
 
     await sleep(1); //adjust frequency here sleep(seconds)
   }
+}
+
+async function getVal(company,callback){
+
+  let promise = new Promise((resolve,reject)=>{
+    asyncForEach(clist,(object,index,array)=>{
+      if(object.name === company)
+        return resolve(object.value);
+    });
+    reject(Error("company not found"));
+  });
+
+   return promise.then(res => callback(false,res))
+                  .catch(err => callback(err));
 }
 
 //list company names here
@@ -46,4 +60,8 @@ async function listCompanies(){
   })
 }
 
-start();
+
+
+
+exports.start = start;            //start() to start the stock market
+exports.getVal = getVal;          //getVal('company_name',(err,value)=>{...} ) ;
