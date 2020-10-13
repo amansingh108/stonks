@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/MurmuDev/stonks/issues"
   },
-  "homepage": "https://github.com/MurmuDev/stonks#readme"
+  "homepage": "https://github.com/MurmuDev/stonks#readme",
+  "dependencies": {
+    "connect-flash": "^0.1.1",
+    "crypto": "^1.0.1",
+    "express-session": "^1.17.1",
+    "memory": "0.0.3",
+    "mysql": "^2.18.1",
+    "passport": "^0.4.1",
+    "session-memory-store": "^1.0.0"
+  }
 }
