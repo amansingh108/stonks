@@ -27,6 +27,7 @@ function nextVal(value){
 
 //change valuation after given frequency
 async function start(){
+  console.log('stock market started....');
   while(true){
 
     asyncForEach(clist,(object,index,array)=>{
