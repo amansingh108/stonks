@@ -27,4 +27,8 @@ function initialize(passport,getUserByEmail,getUserById){
 
 }
 
+function setPassport(passport){
+  
+}
+
 module.exports = initialize;
