@@ -36,12 +36,8 @@ function nextVal(value){
 
 //change valuation after given frequency
 async function start(){
-<<<<<<< HEAD
   console.log('stock market started....');
   while(true){
-=======
->>>>>>> front-end
-
   await gettingFullList().then(res => stock_list = res)
                        .catch(err => console.log(err))
 
