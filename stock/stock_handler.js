@@ -65,6 +65,7 @@ async function start(){
     await util.sleep(1); //adjust frequency here sleep(seconds)
   }
 }
+}
 
 
 //list company names here
