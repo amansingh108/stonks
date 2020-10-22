@@ -1,16 +1,25 @@
-const clist = require('./stock_list').clist;
+const sql = require('../sql/sql');
+const util = require('./stock_util')
+let stock_list = []
+let stock_obj = {}
 
-//sleep
-function sleep(s){
-  return new Promise(resolve => setTimeout(resolve,s*1000));
+//check if stock_engine started
+let stock_size = () => stock_list.length;
+
+
+let gettingFullList = async () =>
+{
+  return new Promise((resolve,reject)=>{
+    sql.show('stocks',(err,res)=>{
+      if(err)
+        reject(err);
+      else
+        resolve(res);
+    });
+  });
 }
 
-//async iterate
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index,array);
-  }
-}
+
 
 //alter value based on high/low %
 //NOTE: check if async/synce
@@ -27,41 +36,91 @@ function nextVal(value){
 
 //change valuation after given frequency
 async function start(){
+  console.log('stock market started....');
+  while(true){
+  await gettingFullList().then(res => stock_list = res)
+                       .catch(err => console.log(err))
+
+  console.log(stock_list);
+
+  //link js object to stock_list
+  // change in list is visible through this js object
+  for (row of stock_list){
+    for (key in row)
+     {
+       if(key === 'code')
+        stock_obj[row[key]] = row
+     }
+  }
+
+
   while(true){
 
-    asyncForEach(clist,(object,index,array)=>{
+    util.asyncForEach(stock_list,(object,index,array)=>{
        //print live data here
-       // console.log(object.name,object.value);
-       array[index].value = nextVal(object.value);
+       console.log(stock_obj["MNNIT"].name,stock_obj["MNNIT"].stk);
+       array[index].val = nextVal(object.val);
     });
 
-    await sleep(1); //adjust frequency here sleep(seconds)
+    await util.sleep(1); //adjust frequency here sleep(seconds)
   }
 }
-
-async function getVal(company,callback){
-
-  let promise = new Promise((resolve,reject)=>{
-    asyncForEach(clist,(object,index,array)=>{
-      if(object.name === company)
-        return resolve(object.value);
-    });
-    reject(Error("company not found"));
-  });
-
-   return promise.then(res => callback(false,res))
-                  .catch(err => callback(err));
 }
+
 
 //list company names here
 async function listCompanies(){
-  asyncForEach(clist,(object,index,array)=>{
+  asyncForEach(stock_list,(object,index,array)=>{
     console.log(object.name);
   })
 }
 
+//get all company db tuples
+function getAll(callback){
+  sql.show('stocks',(err,res)=>{
+    callback(err,res);
+  })
+}
 
 
+//get valuation by company code
+function getLive(callback){
+  if(stock_list == 0)
+   return callback(Error("stock not started yet"))
+  callback(null,stock_list)
+}
 
-exports.start = start;            //start() to start the stock market
-exports.getVal = getVal;          //getVal('company_name',(err,value)=>{...} ) ;
+
+//get live price by company
+function getPrice(company,stakePercent,callback){
+  if((curr_stock = stock_obj[company]) == null)
+   return callback(Error(`requested company not found : ${company}`))
+
+  callback(null,curr_stock.val*stakePercent)
+}
+
+function addStake(company,stake,callback){
+  let curr_stake = stock_obj[company].stk;
+
+  if(curr_stake < stake)
+   return callback(Error(`insuffienct stakes : ${company}`));
+  stock_obj[company].stk = curr_stake + stake;
+  callback(null,stock_obj[company])
+}
+
+// // NOTE for testing ONLY
+// async function test(){
+//   start();
+//   await util.sleep(3);
+//   stock_obj["MNNIT"].stk = 99;
+//   console.log(stock_obj["MNNIT"]);
+// }
+//
+// test();
+
+exports.start = start;
+exports.getAll = getAll;
+exports.gettingFullList = gettingFullList;
+exports.getLive  = getLive;
+exports.getPrice = getPrice;
+exports.addStake = addStake;
