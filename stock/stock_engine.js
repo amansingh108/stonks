@@ -3,13 +3,10 @@ const util = require('./stock_util');
 let stock_list = []
 let stock_obj = {}
 
-//check if stock_engine started
-let stock_size = () => stock_list.length;
-
-
 let gettingFullList = async () =>
 {
   const sql = require('../sql/sql');
+
   return new Promise((resolve,reject)=>{
     sql.show('stocks',(err,res)=>{
       if(err)
@@ -68,7 +65,15 @@ async function start(){
 }
 }
 
+function getList(callback){
+  callback(stock_list)
+}
+
+function getObj(callback){
+  callback(stock_obj)
+}
+
 
 exports.start = start;
-exports.stock_obj = stock_obj;
-exports.stock_list = stock_list;
+exports.getList = getList;
+exports.getObj = getObj;

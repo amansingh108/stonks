@@ -5,12 +5,10 @@ async function asyncForEach(array, callback) {
   }
 }
 
-
 //sleep
 function sleep(s){
   return new Promise(resolve => setTimeout(resolve,s*1000));
 }
-
 
 exports.asyncForEach = asyncForEach;
 exports.sleep = sleep;
