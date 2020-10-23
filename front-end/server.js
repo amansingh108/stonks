@@ -11,13 +11,20 @@ const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
 const path = require('path')
+const stock_router = require('../stock/route')
+const stock_engine = require('../stock/stock_engine')
+const cors = require('cors')
 
 //initializing passport
 const initializedPassport = require('./passport-config')
 initializedPassport(passport)
 
+stock_engine.start()
+app.use(stock_router)
+
 
 app.set('view-engine','ejs')
+app.use(cors())
 app.use(express.urlencoded({extended:false}))
 app.use(flash())
 app.use(session({
@@ -34,4 +41,4 @@ app.use(express.static(path.join(__dirname,"views")));  //styles and scripts dir
 const routes = require('./routes/routes.js')
 app.use('/',routes);
 
-app.listen(5000);
+app.listen(5000,()=>console.log('server listening at 5000'));

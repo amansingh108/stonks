@@ -8,6 +8,7 @@ request.open('GET', 'https://localhost:3000/all', true)
 
 request.onload = function () {
   var data = JSON.parse(this.response);
+  console.log(data);
 }
 // Send request
 request.send();
