@@ -1,0 +1,63 @@
+<%- include ("./partials/header") %>
+
+<!-- user details -->
+<div class="user-data">
+  <div class="user-msg">
+    Hi, <%= name %>
+  </div>
+  <div class="email hidden" id="email">
+    <%= email%>
+  </div>
+</div>
+
+<!-- company header -->
+<div class="head" id="company-name">
+  <%= company %>
+</div>
+
+<br>
+
+<!-- error message -->
+<div class="error" class="hidden" id="error-message"></div>
+
+<br>
+
+<!-- company details -->
+<div class="card">
+  <div id="name"></div>
+  <div id="code"></div>
+  <div id="value"></div>
+  <div id="stake"></div>
+</div>
+
+<br>
+
+<div class="nav">
+  <div class="button" id="browse">
+    Browse
+  </div>
+  <div class="button" id="holdings">
+    Holdings
+  </div>
+  <div class="button" id="fav">
+    Favorites
+  </div>
+
+</div>
+
+<!-- buy from -->
+<div class="buy-form hidden">
+  <label for="stake">Stake</label>
+  <input type="number" name="stake" min="0" step="any" value="0" id="stake-input">
+  <button type="button" name="confirm" id="confirm-button">Confirm</button>
+</div>
+<button type="button" name="buy" id="buy-button">Buy</button>
+<br>
+<br>
+<!-- logout button -->
+<form action = "/logout?_method=DELETE" method="POST">
+  <button type="submit" name="button">Log Out</button>
+</form>
+
+<!-- use company_footer -->
+<%- include ("./partials/company_footer") %>

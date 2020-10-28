@@ -2,13 +2,41 @@ const router = require('express').Router();
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 
-//local sql setup
+//local sql
 const sql = require('../../sql/sql');
 
-router.get('/',checkAuthenticated,(req,res)=>{
-  res.render('index.ejs',{name : req.user.name,email : req.user.email});
-  console.log(req.user);
+//local mongodb
+const mongo = require('../../sql/mongo')
+
+
+router.get('/profile',checkAuthenticated,(req,res)=>{
+  res.render('profile.ejs',{name:req.user.name,email:req.user.email})
 })
+
+router.get('/browse',checkAuthenticated,(req,res)=>{
+  res.render('browse.ejs',{name:req.user.name,email:req.user.email})
+})
+
+router.get('/browse/:company',checkAuthenticated,(req,res)=>{
+  res.render('company.ejs',{company:req.params.company,name:req.user.name,email:req.user.email})
+})
+
+router.get('/',checkAuthenticated,(req,res,next)=>{
+  res.redirect('/profile')
+})
+
+router.get('/profile/holdings',checkAuthenticated,(req,res)=>{
+  res.render('holding.ejs',{name:req.user.name,email:req.user.email})
+})
+
+router.get('/profile/favs',checkAuthenticated,(req,res)=>{
+  res.render('fav.ejs',{name:req.user.name,email:req.user.email})
+})
+
+router.get('/profile/transactions',checkAuthenticated,(req,res)=>{
+  //render transactions
+})
+
 
 
 router.get('/login',checkNotAuthenticated,(req,res)=>{
@@ -16,7 +44,7 @@ router.get('/login',checkNotAuthenticated,(req,res)=>{
 })
 
 router.post('/login',checkNotAuthenticated,passport.authenticate('local',{
-  successRedirect: '/',
+  successRedirect: '/profile',
   failureRedirect: '/login',
   failureFlash : true
 }))
@@ -27,6 +55,7 @@ router.get('/register',checkNotAuthenticated,(req,res)=>{
 
 router.post('/register',checkNotAuthenticated,async (req,res)=>{
   try{
+
     const hashedPassword = await bcrypt.hash(req.body.password,10)
     userobj = {
       id: Date.now().toString(),
@@ -34,11 +63,27 @@ router.post('/register',checkNotAuthenticated,async (req,res)=>{
       email:req.body.email,
       password:hashedPassword
     };
+
+
     sql.insertUser(userobj,(err,result)=>{
       if(err)
        throw err
       console.log(result);
     })
+
+    let mongoUserInstance = {
+      'email' : req.body.email,
+      'funds' : 1000,
+      'fav' : [],
+      'holding' : []
+    }
+
+    mongo.insert(mongoUserInstance,'webster',(err,res)=>{
+      if(err)
+       throw err
+      console.log(res);
+    })
+
     res.redirect('/login')
   }catch(e){
     res.redirect('/register')

@@ -1,0 +1,16 @@
+<%- include ("./partials/header") %>
+<!-- main header -->
+<div class="heading">This is the heading</div>
+
+<!-- container to display all stocks -->
+<div id="stocks" class='container'></div>
+
+<!-- redirect to profile -->
+<button type="button" name="button" id="profileClick">Profile</button>
+
+<!-- proceed to logout -->
+<form action = "/logout?_method=DELETE" method="POST">
+  <button type="submit" name="button">Log Out</button>
+</form>
+
+<%- include ("./partials/browse_footer") %>

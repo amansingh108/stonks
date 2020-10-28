@@ -1,0 +1,21 @@
+<%- include ("./partials/header") %>
+<div class="hidden" id="email">
+  <%= email%>
+</div>
+<div class="head">
+  Holdings
+</div>
+<br>
+<div id="empty-msg" class="msg">
+
+</div>
+
+<div class="container" id="card-container"></div>
+
+<button type="button" name="button" id="profileClick">Profile</button>
+
+<form action = "/logout?_method=DELETE" method="POST">
+  <button type="submit" name="button">Log Out</button>
+</form>
+
+<%- include ("./partials/holding_footer") %>

@@ -1,0 +1,34 @@
+<%- include ("./partials/header") %>
+
+<!-- user info passed from router -->
+<div class="user-data">
+  <div class="name" id="name">
+    <%= name %>
+  </div>
+  <div class="hidden" id="email">
+    <%= email%>
+  </div>
+</div>
+
+<!-- page head -->
+<div class="head">
+  Favorites
+</div>
+
+<!-- container to hold all the fav cards -->
+<div class="container" class="favs" id="fav-container"></div>
+
+<!-- Message display if favs list is empty -->
+<div class="msg" id="empty-msg"></div>
+
+<!-- redirect to profile -->
+<br>
+<button type="button" name="button" id="profileClick">Profile</button>
+<br>
+
+<!-- proceed to logout -->
+<form action = "/logout?_method=DELETE" method="POST">
+  <button type="submit" name="button">Log Out</button>
+</form>
+
+<%- include ("./partials/fav_footer") %>
