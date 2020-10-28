@@ -8,8 +8,8 @@ const util = require('./stock_util')
 let getdb = () => client.connect();
 dbPromise = getdb();    //global db promise
 
-const stock_observer = require('./stock_observer')
-const stock = require('./stock_handler')  //for testing
+const interface = require('./stock_interface')
+const stock = require('./stock_engine')  //for testing
 
 
 const mongoUpdate = (searchQuery,updateQuery,callback) =>{
@@ -61,52 +61,25 @@ const userFund = (email,callback)=>{
     })
 }
 
+//get all the objects
 const getAll = (callback) =>{
-  stock_observer.getAll(callback);
+  interface.getAll(callback);
 }
 
-const getFav = (email,callback) =>{
+const getUser = (email,callback) => {
   dbPromise
     .then((db_client)=>{
-      db = db_client.db('webster')
 
-      var query = {"email":email}
-      var projection = {"fav":1,"_id":0}
-
-      var cursor = db.collection('user_data').find(query);
-
-      cursor.project(projection).forEach((res)=>{
-        callback(null,res)
-      })
-
-
+        db = db_client.db('webster')
+        var query = {"email":email}
+        db.collection('user_data').findOne(query)
+         .then(res => callback(null,res))
+         .catch(err => callback(err))
     })
     .catch((err)=>{
       callback(err)
     })
 }
-
-const getHoldings = (email,callback)=>{
-  dbPromise
-    .then((db_client)=>{
-      db = db_client.db('webster')
-
-      var query = {"email":email}
-      var projection = {"holding":1,"_id":0}
-
-      var cursor = db.collection('user_data').find(query);
-
-      cursor.project(projection).forEach((holding)=>{
-        callback(null,holding)
-      })
-
-
-    })
-    .catch((err)=>{
-      callback(err)
-    })
-}
-
 
 
 const addFav = (email,company,callback)=>{
@@ -173,13 +146,18 @@ const userFundPromise = (email) => new Promise((resolve,reject)=>{
 })
 
 const pricePromise = (company,stakePercent) =>  new Promise((resolve,reject)=>{
-    stock.getPrice(company,stakePercent,(err,val)=>{
+    interface.getPrice(company,stakePercent,(err,val)=>{
       if(err)
        reject(err)
       resolve(val)
     })
   })
 
+const getPrice = async (company,stakePercent,callback) => {
+  pricePromise(company,stakePercent,callback)
+    .then(val => callback(null,val))
+    .catch(err => callback(err))
+}
 
 const buy = async (email,company,stakePercent,callback) =>{
 
@@ -325,26 +303,10 @@ const sell = async (email,holding,stakePercent,callback) =>{
 }
 
 
-
-async function test(){
-  stock.start();
-  await util.sleep(3);
-  let holding = { "name" : "MNNIT", "stake" : 3e-11, "price" : 0.004931234888739698, "date" : "2020-10-21T15:44:52.727Z" }
-
-
-  sell("noone",holding,3e-11,(err,res)=>{
-    try{
-    if(err)
-     throw err
-    console.log(res);
-    }
-    catch(e)
-     {
-       console.log(e);
-     }
-  })
-
-
-}
-
-test();
+exports.getPrice = getPrice
+exports.getAll = getAll
+exports.getUser = getUser
+exports.addFav = addFav
+exports.removeFav = removeFav
+exports.buy = buy
+exports.sell = sell
