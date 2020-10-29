@@ -1,18 +1,17 @@
 //link to profile
 let profileUrl = `http://localhost:5000/profile`
+//fav request link
+let favUrl = `http://localhost:5000/fav`
 
-function profileClick(){
-  window.location.replace(profileUrl)
-}
+function profileClick(){  window.location.replace(profileUrl)}
+
 document.getElementById('profileClick').addEventListener('click',profileClick)
 
 //empty message
-function noHoldings(){
-  document.getElementById('empty-msg').innerHTML = 'No Holdings'
-}
+function noHoldings(){ document.getElementById('empty-msg').innerHTML = 'No Holdings' }
 
+//send request to update fav of current user
 function sendRequest(requestObj){
-
   // Create a request variable and assign a new XMLHttpRequest object to it.
   var request = new XMLHttpRequest()
   //getting user object

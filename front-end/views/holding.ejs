@@ -1,19 +1,23 @@
 <%- include ("./partials/header") %>
-<div class="hidden" id="email">
-  <%= email%>
-</div>
-<div class="head">
-  Holdings
-</div>
+
+<!-- User Details -->
+<div class="hidden" id="email"><%= email%></div>
+
+<!-- Holdings Header -->
+<div class="head">  Holdings  </div>
+
 <br>
-<div id="empty-msg" class="msg">
 
-</div>
+<!-- Hiddent Message Box -->
+<div id="empty-msg" class="msg"></div>
 
+<!-- Container to store the Favorite elements -->
 <div class="container" id="card-container"></div>
 
+<!-- redirect to profile page -->
 <button type="button" name="button" id="profileClick">Profile</button>
 
+<!-- proceed to logout -->
 <form action = "/logout?_method=DELETE" method="POST">
   <button type="submit" name="button">Log Out</button>
 </form>

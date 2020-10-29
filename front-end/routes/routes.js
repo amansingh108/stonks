@@ -34,7 +34,7 @@ router.get('/profile/favs',checkAuthenticated,(req,res)=>{
 })
 
 router.get('/profile/transactions',checkAuthenticated,(req,res)=>{
-  //render transactions
+  res.render('transaction.ejs',{name:req.user.name,email:req.user.email})
 })
 
 
@@ -75,7 +75,8 @@ router.post('/register',checkNotAuthenticated,async (req,res)=>{
       'email' : req.body.email,
       'funds' : 1000,
       'fav' : [],
-      'holding' : []
+      'holding' : [],
+      'transaction' : []
     }
 
     mongo.insert(mongoUserInstance,'webster',(err,res)=>{

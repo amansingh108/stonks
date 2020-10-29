@@ -1,42 +1,48 @@
+//link for profile
 let profileUrl = `http://localhost:5000/profile`
 
-function profileClick(){
-  window.location.href = profileUrl
-}
+//profile page
+function profileClick(){window.location.href = profileUrl}
 document.getElementById('profileClick').addEventListener('click',profileClick)
 
-
-function showFull(){
-  window.location.href = `http://localhost:5000/browse/${this.id}`
-}
+//company page
+function showFull(){window.location.href = `http://localhost:5000/browse/${this.id}`}
 
 function display(data){
-  let stocks = document.getElementById('stocks')
+  if(data.status == 'fail' || data.status == 'error')
+   {
+      return document.getElementById('error-message').visibility = visible
+   }
 
-  //for every element of response create a stock-card
-  for(code of data.data) //nested data
-  {
-    //create a stock-card
-    let stock_div = document.createElement('div')
-    stock_div.className = 'stock-card'
-      //set the stock-code for header
-      let stock_code = document.createElement('div')
-      stock_code.className = 'stock-code'
-      stock_code.innerHTML = code
-    stock_div.appendChild(stock_code)
-    stock_div.id = code
-    stock_div.addEventListener('click',showFull)
+   let stocks = document.getElementById('stocks')
 
-    let btn = document.createElement('div')
-    btn.innerHTML = 'button'
-    stock_div.appendChild(btn)
+   for(company of data.data){
+     // Company card
+     let company_card = document.createElement('div')
+     company_card.id = company.code
+     company_card.addEventListener('click',showFull)
 
+     let company_name = document.createElement('div');
+     company_name.innerHTML = company.name;
 
-    stocks.appendChild(stock_div)
-  }
+     let company_code = document.createElement('div');
+     company_code.innerHTML = company.code;
+
+     let company_growth = document.createElement('div');
+     company_growth.innerHTML = (company.value-company.initial)/company.initial * 0.01;
+
+     let br = document.createElement('br')
+
+     company_card.appendChild(company_name)
+     company_card.appendChild(company_code)
+     company_card.appendChild(company_growth)
+     company_card.appendChild(br)
+     stocks.appendChild(company_card)
+   }
+
 }
 
-//update funds
+//updating stock objects
 function getObj(){
   // Create a request variable and assign a new XMLHttpRequest object to it.
   var request = new XMLHttpRequest()

@@ -7,27 +7,14 @@ function displayData(data){
 }
 
 //Notify user on fav
-function notifyFav(flag,callback){
-  let company_card = document.getElementById('name').parentNode
+function changeFav(obj){
+  document.getElementById('btn').innerHTML = 'waiting..'
+  let email = document.getElementById('email').innerHTML.trim()
 
-  //add break
-  let br = document.createElement('br')
-  company_card.appendChild(br)
+  let requestObj = obj
+  requestObj['email'] = email
 
-  //Configuring the button
-  let button = document.createElement('button')
-  button.id = 'btn'
-  if(flag == 1)
-   {
-     button.innerHTML = 'Remove from Favorites'
-   }
-  else
-   {
-     button.innerHTML = 'Add to Favorites'
-   }
-
-  company_card.appendChild(button)
-  callback(button)
+  sendFavRequest(requestObj)
 }
 
 //send fav request
@@ -43,47 +30,16 @@ function sendFavRequest(requestObj){
   request.onload = function () {
     var data = JSON.parse(this.response);
     console.log(data);
+    checkFav()
   }
   console.log('request',JSON.stringify(requestObj));
   // Send request
   request.send(JSON.stringify(requestObj));
 }
 
-//Check from list of user favorites
-function checkFav(favs){
-  let current = document.getElementById('code').innerHTML.trim()
-  let email = document.getElementById('email').innerHTML.trim()
-
-  let favObj = {
-    'email' : email,
-    'fav' : current
-  }
-
-  for(var i = 0;i<favs.length;i++){
-    if(current == favs[i])
-     {
-       favObj['type'] = 'remove'
-       notifyFav(1,(button)=>{
-           button.addEventListener('click',function(){
-           sendFavRequest(favObj)
-           console.log('parsed',favObj);
-         })
-       })
-       return
-     }
-  }
-
-  notifyFav(0,(button)=>{
-    favObj['type'] = 'add'
-    button.addEventListener('click',function(){
-    sendFavRequest(favObj)
-    console.log('parsed',favObj);
-      })
-    })
-}
 
 //get user details to check favorite status
-function getUserObj(){
+function getUserObj(callback){
   // Create a request variable and assign a new XMLHttpRequest object to it.
   var request = new XMLHttpRequest()
   let email = document.getElementById('email').innerHTML.trim();
@@ -92,15 +48,15 @@ function getUserObj(){
 
   request.onload = function () {
     var data = JSON.parse(this.response);
-    checkFav(data.data.fav)
+    callback(data.data)
   }
   // Send request
   request.send({"email":email});
 }
-getUserObj();
+
 
 // Update company details
-function getStockObj(){
+function getStockObj(callback){
   // Create a request variable and assign a new XMLHttpRequest object to it.
   var request = new XMLHttpRequest()
   let company = document.getElementById('company-name').innerHTML.trim();
@@ -110,15 +66,49 @@ function getStockObj(){
   request.onload = function () {
     var data = JSON.parse(this.response);
     console.log(data);
+
     if(data.status == 'success')
      displayData(data.data)
     else
      displayError(data.message)
+
+    callback(data)
   }
   // Send request
   request.send();
 }
-getStockObj();
+
+// Check if current company is fav
+function checkFav(){
+  getStockObj(function(stockobj){
+    getUserObj(function(userobj){
+      let button = document.getElementById('btn')
+      let current = stockobj.data.code
+      for(fav of userobj.fav)
+       {
+        if(fav == current)
+          {
+            button.textContent = 'Remove from Favorites'
+            button.addEventListener('click',function(){
+              changeFav({
+                code : current,
+                action : 'remove'
+              })
+            })
+            return
+          }
+       }
+       button.textContent = 'Add to Favorites'
+       button.addEventListener('click',function(){
+         changeFav({
+           code : current,
+           action : 'add'
+         })
+       })
+    })
+  })
+}
+checkFav()
 
 //using buy form
 function buy(){
@@ -150,26 +140,18 @@ function sendRequest(requestObj){
 //parsing and sending request
 function parseObj(){
   let requestobj = {
-    email : document.getElementById('email').innerHTML.trim(),
+    email :   document.getElementById('email').innerHTML.trim(),
     company : document.getElementById('company-name').innerHTML.trim(),
-    stake : document.getElementById('stake-input').value
+    stake :   parseFloat(document.getElementById('stake-input').value)
   }
   sendRequest(requestobj)
 }
 document.getElementById('confirm-button').addEventListener('click',parseObj)
 
 //redirecting
-function browseRedirect(){
-  window.location.href = browseLink;
-}
-
-function holdingRedirect(){
-  window.location.href = holdingLink;
-}
-
-function favRedirect(){
-  window.location.href = favLink;
-}
+function browseRedirect(){  window.location.href = browseLink;}
+function holdingRedirect(){ window.location.href = holdingLink;}
+function favRedirect(){     window.location.href = favLink;}
 
 const browseLink = 'http://localhost:5000/browse'
 const holdingLink = 'http://localhost:5000/profile/holdings'
