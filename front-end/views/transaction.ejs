@@ -1,0 +1,36 @@
+<%- include ("./partials/header") %>
+
+<!-- User Details -->
+<div class="user-data">
+  <div class="user-msg">  Hi, <%= name %> </div>
+  <div class="email" class="hidden" id="email"> <%= email%> </div>
+  <div class="box" class="fund">
+    <div id="fund-head">Funds: </div>
+    <div id="funds"></div>
+  </div>
+</div>
+
+<br>
+
+<!-- Error in fetching user error -->
+<div class="error" id="user-data-error"></div>
+<br>
+
+<!-- Transaction head -->
+<div class="head"> Transactions </div>
+<br>
+
+<!-- sort bar -->
+<div class="bar" id="sort-bar"></div>
+
+<br>
+<!-- container for tranctions -->
+<div class="container" id="transaction-container"></div>
+<br>
+
+<!-- Proceed to logout -->
+<form action = "/logout?_method=DELETE" method="POST">
+  <button type="submit" name="button">Log Out</button>
+</form>
+
+<%- include ("./partials/transaction_footer") %>

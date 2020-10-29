@@ -222,15 +222,27 @@ const buy = async (email,company,stakePercent,callback) =>{
     console.log(res);
   })
 
-  console.log(new Date().toISOString());
+
+  //recording transaction
   const transaction = {
     date : new Date().toISOString(),
     user : email,
+    company : company,
+    stake : stakePercent,
     profit : null
   }
-  //record transaction here
-  //let transaction = {}
-  callback(null,transaction);
+
+  updateQuery = {
+    $push:{
+      "transaction" : transaction
+    }
+  }
+
+  mongoUpdate(searchQuery,updateQuery,(err,res)=>{
+    if(err)
+     return callback(err)
+    console.log(null,res);
+  })
 }
 
 const sell = async (email,holding,stakePercent,callback) =>{
@@ -298,7 +310,7 @@ const sell = async (email,holding,stakePercent,callback) =>{
 
         holding.price = newPrice
         holding.stake = newStake
-        
+
         console.log(holding);
         updateQuery = {
           $push :{
@@ -319,8 +331,25 @@ const sell = async (email,holding,stakePercent,callback) =>{
 
 
     //record transaction here
-    //let transaction = {}
-    callback(null,transaction)
+    let transaction = {
+      date : new Date().toISOString(),
+      email :email,
+      company : holding.name,
+      stake : stakePercent,
+      profit : value - stakePercent*holding.price/holding.stake
+    }
+
+    updateQuery = {
+      $push:{
+        'transaction':transaction
+      }
+    }
+
+    mongoUpdate(searchQuery,updateQuery,(err,res)=>{
+      if(err)
+       return callback(err)
+      console.log(res);
+    })
 
 }
 

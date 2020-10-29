@@ -20,12 +20,15 @@ getObj();
 function browseRedirect(){window.location.href = browseLink}
 function holdingRedirect(){window.location.href = holdingLink }
 function favRedirect(){window.location.href = favLink}
+function transactionRedirect(){window.location.href = transactionLink}
 
 const browseLink = 'http://localhost:5000/browse'
 const holdingLink = 'http://localhost:5000/profile/holdings'
 const favLink = 'http://localhost:5000/profile/favs'
+const transactionLink = 'http://localhost:5000/profile/transactions'
 
 //redirect on click
 document.getElementById('browse').addEventListener('click',browseRedirect)
 document.getElementById('holdings').addEventListener('click',holdingRedirect)
 document.getElementById('fav').addEventListener('click',favRedirect)
+document.getElementById('transactions').addEventListener('click',transactionRedirect)
