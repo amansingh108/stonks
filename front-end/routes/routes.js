@@ -75,7 +75,8 @@ router.post('/register',checkNotAuthenticated,async (req,res)=>{
       'email' : req.body.email,
       'funds' : 1000,
       'fav' : [],
-      'holding' : []
+      'holding' : [],
+      'transaction' : []
     }
 
     mongo.insert(mongoUserInstance,'webster',(err,res)=>{

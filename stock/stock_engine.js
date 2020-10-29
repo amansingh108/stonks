@@ -19,6 +19,7 @@ let gettingFullList = async () =>
 
 
 
+
 //alter value based on high/low %
 //NOTE: check if async/synce
 function nextVal(value){
@@ -39,15 +40,18 @@ async function start(){
   await gettingFullList().then(res => stock_list = res)
                        .catch(err => console.log(err))
 
-  console.log(stock_list);
+
 
   //link js object to stock_list
   // change in list is visible through this js object
   for (row of stock_list){
+    row['initial'] = row['val']
     for (key in row)
      {
+
        if(key === 'code')
         stock_obj[row[key]] = row
+
      }
   }
 
@@ -56,7 +60,7 @@ async function start(){
 
     util.asyncForEach(stock_list,(object,index,array)=>{
        //print live data here
-       //console.log(stock_obj);
+       // console.log(stock_obj);
        array[index].val = nextVal(object.val);
     });
 

@@ -17,17 +17,9 @@ function getObj(){
 }
 getObj();
 
-function browseRedirect(){
-  window.location.href = browseLink;
-}
-
-function holdingRedirect(){
-  window.location.href = holdingLink;
-}
-
-function favRedirect(){
-  window.location.href = favLink;
-}
+function browseRedirect(){window.location.href = browseLink}
+function holdingRedirect(){window.location.href = holdingLink }
+function favRedirect(){window.location.href = favLink}
 
 const browseLink = 'http://localhost:5000/browse'
 const holdingLink = 'http://localhost:5000/profile/holdings'
