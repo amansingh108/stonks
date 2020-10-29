@@ -61,6 +61,16 @@ const userFund = (email,callback)=>{
     })
 }
 
+//get company object
+const getCompany = (company,callback) =>{
+  interface.getObj((obj)=>{
+    companyObj = obj[company]
+    if(companyObj == null)
+     return callback(Error("COMPANY_DOES_NOT_EXIST"))
+    callback(null,companyObj)
+  })
+}
+
 //get all the objects
 const getAll = (callback) =>{
   interface.getAll(callback);
@@ -176,7 +186,7 @@ const buy = async (email,company,stakePercent,callback) =>{
       return callback(Error(`insuffienct funds \n funds less than stock value`))
 
   //reduce stake in stocks table
-  stock_observer.addStake(company,-stakePercent,callback);
+  interface.addStake(company,-stakePercent,callback);
 
   let searchQuery = {"email":email}
   //set funding
@@ -275,24 +285,36 @@ const sell = async (email,holding,stakePercent,callback) =>{
       }
 
       //remove current holding
-      mongoUpdate(searchQuery,updateQuery,callback);
+      mongoUpdate(searchQuery,updateQuery,(err,res)=>{
+        if(err)
+         return err
+        console.log(res)
 
-      //partial stock transaction
-      holding.price = holding.price - stakePercent*holding.price;
-      holding.stake = holding.stake - stakePercent;
+        console.log(holding);
 
-      updateQuery = {
-        $push :{
-          "holding":holding
+        //recalculate stake and price
+        newStake = holding.stake - stakePercent;
+        newPrice = holding.price * newStake/holding.stake
+
+        holding.price = newPrice
+        holding.stake = newStake
+        
+        console.log(holding);
+        updateQuery = {
+          $push :{
+            "holding":holding
+          }
         }
-      }
 
-      //push updated holding
-      mongoUpdate(searchQuery,updateQuery,callback);
+        //push updated holding
+        mongoUpdate(searchQuery,updateQuery,callback);
+      });
+
+
     }
 
     //restore global stake
-    stock_observer.addStake(holding.name,stakePercent,callback);
+    interface.addStake(holding.name,stakePercent,callback);
 
 
 
@@ -302,7 +324,7 @@ const sell = async (email,holding,stakePercent,callback) =>{
 
 }
 
-
+exports.getCompany = getCompany
 exports.getPrice = getPrice
 exports.getAll = getAll
 exports.getUser = getUser
