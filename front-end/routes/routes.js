@@ -2,6 +2,7 @@ const router = require('express').Router();
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 
+
 //local sql
 const sql = require('../../sql/sql');
 

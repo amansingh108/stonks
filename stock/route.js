@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const handler = require('./client_handler')
+var SSE = require('sse-nodejs')
 
 router.get('/all',(req,res)=>{
   handler.getAll((err,rows)=>{
@@ -16,9 +17,25 @@ router.get('/all',(req,res)=>{
   })
 })
 
+router.get('/live/:company',(req,res)=>{
+    console.log('Got /events');
+    var app = SSE(res);
+
+    handler.getCompany(req.params.company,(err,obj)=>{
+      app.sendEvent('getstock',obj,1000);
+    })
+
+    app.disconnect(function () {
+        console.log("disconnected");
+    });
+
+    app.removeEvent('getstock',3100);
+
+  });
+
 
 //get live company obj
-router.get('/company/:stock',(req,res)=>{
+router.get('/company/:stock',(req,res,next)=>{
   console.log(`request received for /browse/${req.params.stock}`);
 
   handler.getCompany(req.params.stock.toUpperCase(),(err,obj)=>{
@@ -35,6 +52,8 @@ router.get('/company/:stock',(req,res)=>{
     res.send(JSON.stringify(response))
     res.end()
   })
+
+  next()
 })
 
 router.get('/user/:email',(req,res)=>{
@@ -189,13 +208,6 @@ router.post('/price',(req,res)=>{
   })
 })
 
-router.get('/user/:username/add/:company',(req,res)=>{
-  console.log(req.params);
-})
 
-//get() fav
-//get() holding
-//get() fund
-//get()
 
 module.exports = router
