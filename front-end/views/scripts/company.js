@@ -4,6 +4,8 @@ function displayData(data){
   document.getElementById('code').innerHTML = data.code;
   document.getElementById('stake').innerHTML = data.stk;
   document.getElementById('value').innerHTML = data.val;
+  setConverter(data.val/data.stk)
+
 }
 
 //Notify user on fav
@@ -15,6 +17,18 @@ function changeFav(obj){
   requestObj['email'] = email
 
   sendFavRequest(requestObj)
+}
+
+function setConverter(rate){
+  let stake = document.getElementById('converter-stake')
+  let val = document.getElementById('converter-value')
+  stake.addEventListener('input',function(){
+    val.value = this.value*rate
+})
+  val.addEventListener('input',function(){
+    stake.value = this.value/rate
+  })
+
 }
 
 //send fav request

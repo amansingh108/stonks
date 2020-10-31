@@ -35,7 +35,7 @@ app.use(cors())
 app.use(express.urlencoded({extended:false}))
 app.use(flash())
 app.use(session({
-  secret:'process.env.SESSION_SECRET',
+  secret:'process.env.SESSION_SECRET', //holds the secrete environment variable
   resave:false,
   saveUninitialized: true
 }))
@@ -55,7 +55,6 @@ app.use(express.urlencoded({
 const routes = require('./routes/routes.js')
 app.use(stock_router);
 app.use('/',routes);
-
 
 
 //server listening
