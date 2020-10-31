@@ -46,6 +46,7 @@ async function start(){
   // change in list is visible through this js object
   for (row of stock_list){
     row['initial'] = row['val']
+    row['date_time'] = new Date()
     for (key in row)
      {
 
@@ -62,6 +63,7 @@ async function start(){
        //print live data here
        // console.log(stock_obj);
        array[index].val = nextVal(object.val);
+       array[index].date_time = new Date();
     });
 
     await util.sleep(1); //adjust frequency here sleep(seconds)
