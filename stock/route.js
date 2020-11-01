@@ -29,7 +29,7 @@ router.get('/live/:company',(req,res)=>{
         console.log("disconnected");
     });
 
-    app.removeEvent('getstock',100000);
+    app.removeEvent('getstock',86400000);
 
   });
 

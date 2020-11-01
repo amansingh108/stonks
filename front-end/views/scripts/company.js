@@ -4,11 +4,29 @@ function displayData(data){
   document.getElementById('code').innerHTML = data.code;
   document.getElementById('stake').innerHTML = data.stk;
   document.getElementById('value').innerHTML = data.val;
+  setConverter(data.val/data.stk)
+}
+
+
+function setConverter(rate){
+  let value = document.getElementById('value-converter-input')
+  let stake = document.getElementById('stake-converter-input')
+
+  value.addEventListener('input',function(){
+    stake.value = value.value/rate
+  })
+
+  stake.addEventListener('input',function(){
+    value.value = stake.value*rate
+  })
 }
 
 //Notify user on fav
 function changeFav(obj){
-  document.getElementById('btn').innerHTML = 'waiting..'
+  let favbutton = document.getElementById('btn')
+  favbutton.innerHTML = 'waiting ....'
+  favbutton.addEventListener('click',function(){})
+
   let email = document.getElementById('email').innerHTML.trim()
 
   let requestObj = obj
@@ -112,13 +130,16 @@ checkFav()
 
 //using buy form
 function buy(){
-  console.log('buy');
   var hidden_elements = document.getElementsByClassName('buy-form')
   for (var i = 0; i < hidden_elements.length; i++) {
    hidden_elements.item(i).style.visibility = 'visible';
+  }
+
 }
-}
-document.getElementById('buy-button').addEventListener('click',buy)
+document.getElementById('buy-button').addEventListener('click',function(){
+  document.getElementById('buy-button').className = 'hidden'
+  buy()
+})
 
 
 //sending a request
