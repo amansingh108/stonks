@@ -28,7 +28,6 @@ window.onload = function(){
 
       //Parse SSE data
       let stock = JSON.parse(result.data)
-      console.log(stock);
 
 
       let value = stock.val
@@ -39,7 +38,6 @@ window.onload = function(){
       if(counter>limit)
         removeData(chart)
     })
-    console.log(chart);
   })
 
 }
