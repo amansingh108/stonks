@@ -41,15 +41,35 @@
   <div class="button" id="fav">       Favorites </div>
 </div>
 
+<br>
+
+<!-- Connect to socket data for graph -->
+<div class="" id="socket-btn"></div>
+
 <!-- buy from -->
 <div class="buy-form hidden">
+  <div class="buy-form hidden">
+    <label for="">Converter</label>
+    <br>
+    <label for="stake-converter-input">Stake %</label>
+    <input type="number" name="stake" id="stake-converter-input" min="0" max="100" step="any">
+    <label for="value-converter-input">Valuation</label>
+    <input type="number" name="price" id="value-converter-input"min="0" step="any">
+  </div>
   <label for="stake">Stake</label>
   <input type="number" name="stake" min="0" step="any" value="0" id="stake-input">
   <button type="button" name="confirm" id="confirm-button">Confirm</button>
+
 </div>
-<button type="button" name="buy" id="buy-button">Buy</button>
+<button type="button" name="buy" id="buy-button">Proceed to Buy</button>
 <br>
+
+<!-- Chart canvas -->
+<div class="" id="chart-container">
+  <canvas id="chart" width="300" height="300"></canvas>
+</div>
 <br>
+
 <!-- logout button -->
 <form action = "/logout?_method=DELETE" method="POST">
   <button type="submit" name="button">Log Out</button>

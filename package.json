@@ -18,11 +18,16 @@
   "homepage": "https://github.com/MurmuDev/stonks#readme",
   "dependencies": {
     "connect-flash": "^0.1.1",
+    "cors": "^2.8.5",
     "crypto": "^1.0.1",
+    "express": "^4.17.1",
     "express-session": "^1.17.1",
     "memory": "0.0.3",
+    "mongodb": "^3.6.2",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
-    "session-memory-store": "^1.0.0"
+    "session-memory-store": "^1.0.0",
+    "socket.io": "^2.3.0",
+    "sse-nodejs": "^0.1.0"
   }
 }

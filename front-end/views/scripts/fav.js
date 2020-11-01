@@ -33,10 +33,13 @@ function sendFavRequest(requestObj){
   request.send(JSON.stringify(requestObj));
 }
 
+//company page
+function showFull(code){window.location.href = `http://localhost:5000/browse/${code}`}
 
 
 //setting the favorites
 function setFavs(favs){
+  console.log(favs);
   let fav_container = document.getElementById('fav-container')
   for(fav of favs)
   {
@@ -49,14 +52,36 @@ function setFavs(favs){
     fav_element.innerHTML = fav
     fav_card.appendChild(fav_element)
 
-    //setting the remove button
-    let removeButton = document.createElement('button')
-    removeButton.textContent = 'Remove'
-    removeButton.addEventListener('click',function(e){
-      parseRequest(e.target.parentNode.id)
-      e.target.parentNode.remove()
-    })
-    fav_card.appendChild(removeButton)
+    //get and set fav stock obj and remove button at the end
+    getStockObj(fav,function(company){
+      if(company.status != 'success')
+       return
+      company = company.data
+      console.log(company);
+
+
+      fav_element.addEventListener('click',function(e){
+        showFull(e.target.parentNode.id)
+      })
+
+      //setting the remove button
+      let removeButton = document.createElement('button')
+      removeButton.textContent = 'Remove'
+      removeButton.addEventListener('click',function(e){
+        parseRequest(e.target.parentNode.id)
+        e.target.parentNode.remove()
+      })
+      fav_card.appendChild(removeButton)
+
+      let company_growth = document.createElement('div');
+      company_growth.innerHTML = (company.val-company.initial)/company.initial * 0.01;
+
+      let company_value = document.createElement('div');
+      company_value.innerHTML = company.val
+
+      fav_card.appendChild(company_growth)
+      fav_card.appendChild(company_value)
+  })
 
     // appending the fav_element to the fav-container
     fav_container.appendChild(fav_card)
@@ -81,3 +106,20 @@ function getUserObj(){
   request.send();
 }
 getUserObj();
+
+
+// Update company details
+function getStockObj(company_code,callback){
+  // Create a request variable and assign a new XMLHttpRequest object to it.
+  var request = new XMLHttpRequest()
+
+  //getting company stock object
+  request.open('GET', `http://localhost:5000/company/${company_code}`, true)
+
+  request.onload = function () {
+    var data = JSON.parse(this.response);
+    callback(data)
+  }
+  // Send request
+  request.send();
+}
