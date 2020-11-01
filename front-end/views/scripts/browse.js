@@ -5,9 +5,48 @@ let profileUrl = `http://localhost:5000/profile`
 function profileClick(){window.location.href = profileUrl}
 document.getElementById('profileClick').addEventListener('click',profileClick)
 
+function getSearch(search_string,callback){
+  // Create a request variable and assign a new XMLHttpRequest object to it.
+  var request = new XMLHttpRequest()
+  //getting user object
+  request.open('GET', `http://localhost:5000/all/${search_string}`, true)
+
+  request.onload = function () {
+    var data = JSON.parse(this.response);
+    callback(data);
+  }
+  // Send request
+  request.send();
+}
+
+//search
+function search(){
+ let search_string = document.getElementById('search-input').value
+ console.log(search_string);
+
+   function removeAllChildNodes(parent) {
+      while (parent.firstChild) {
+          parent.removeChild(parent.firstChild);
+      }
+    }
+    removeAllChildNodes(document.getElementById('stocks'))
+
+    if(search_string.trim().length != 0)
+     {
+       getSearch(search_string,function(data){
+         display(data);
+       })
+     }
+     else{
+       getAll()
+     }
+
+}
+
 //company page
 function showFull(){window.location.href = `http://localhost:5000/browse/${this.id}`}
 
+//set data on the container
 function display(data){
   if(data.status == 'fail' || data.status == 'error')
    {
@@ -42,8 +81,8 @@ function display(data){
 
 }
 
-//updating stock objects
-function getObj(){
+//fetch from /all
+function getAll(){
   // Create a request variable and assign a new XMLHttpRequest object to it.
   var request = new XMLHttpRequest()
   //getting user object
@@ -56,4 +95,9 @@ function getObj(){
   // Send request
   request.send();
 }
-getObj();
+
+//updating stock objects
+window.onload = function getObj(){
+  getAll()
+  document.getElementById('')
+}

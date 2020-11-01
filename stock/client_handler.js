@@ -76,6 +76,25 @@ const getAll = (callback) =>{
   interface.getAll(callback);
 }
 
+
+//get searched objects
+const getSearched = (search,callback) =>{
+  interface.getAll((err,objects)=>{
+    let newList = []
+    for(obj of objects)
+    {
+      // Check for further properties here
+      if(obj.code == search.toUpperCase() || obj.name.toUpperCase() == search.toUpperCase())
+       {
+         newList.push(obj)
+       }
+    }
+    if(newList.length > 0)
+     return callback(null,newList)
+    callback(Error("EMPTY_SEARCH_LIST"))
+  })
+}
+
 const getUser = (email,callback) => {
   dbPromise
     .then((db_client)=>{
@@ -353,6 +372,7 @@ const sell = async (email,holding,stakePercent,callback) =>{
 
 }
 
+exports.getSearched = getSearched
 exports.getCompany = getCompany
 exports.getPrice = getPrice
 exports.getAll = getAll

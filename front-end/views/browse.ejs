@@ -1,10 +1,20 @@
 <%- include ("./partials/header") %>
 <!-- main header -->
-<div class="heading">This is the heading</div>
+<div class="heading">Browse</div>
 
+<br>
+
+<!-- search bar -->
+<div class="search-form">
+  <input type="text" id="search-input" name="" value="" placeholder="Enter Text">
+  <button type="button" name="button" onclick="search()">Search</button>
+</div>
+
+<br>
 
 <!-- container to display all stocks -->
 <div id="stocks" class='container'></div>
+
 
 <!-- Hidden error message -->
 <div class="error hidden" id="error-message"> UNABLE TO FETCH DATA </div>

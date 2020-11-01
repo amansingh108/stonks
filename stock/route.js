@@ -17,6 +17,29 @@ router.get('/all',(req,res)=>{
   })
 })
 
+
+router.get('/all/:searchQuery',(req,res)=>{
+  handler.getSearched(req.params.searchQuery,(err,rows)=>{
+    let response = {
+       "status":"success",
+       "data":rows
+     }
+     console.log(rows);
+    if(err)
+      {
+        response = {
+           "status":"error",
+           "message":err.toString()
+         }
+      }
+
+    console.log("RESPONSE",response);
+    res.header({'content-type':'application/json'})
+    res.send(response);
+    res.end();
+  })
+})
+
 router.get('/live/:company',(req,res)=>{
     console.log('Got /events');
     var app = SSE(res);

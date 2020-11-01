@@ -36,11 +36,12 @@ function changeFav(obj){
 }
 
 function setConverter(rate){
-  let stake = document.getElementById('converter-stake')
-  let val = document.getElementById('converter-value')
+  let stake = document.getElementById('stake-converter-input')
+  let val = document.getElementById('value-converter-input')
+
   stake.addEventListener('input',function(){
     val.value = this.value*rate
-})
+  })
   val.addEventListener('input',function(){
     stake.value = this.value/rate
   })
