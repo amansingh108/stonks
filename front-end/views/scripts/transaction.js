@@ -1,5 +1,5 @@
 function setTransaction(transactions){
-  let container = document.getElementById('transaction-container')
+  let container = document.getElementById('transactions')
 
   let proxy_container = document.createElement('div')
   proxy_container.id = 'proxy-container'
@@ -34,32 +34,33 @@ function setTransaction(transactions){
 function display(data){
   console.log(data);
   setTransaction(data.transaction)
-  if(data.fav != null && data.fav.length >0)
-   setSortBar(data.fav[0])
 }
 
 
-//set sort bar
-function setSortBar(obj){
-  console.log(obj);
-}
+//search
+function search(){
+ let search_string = document.getElementById('search-input').value
+ console.log(search_string);
 
-//sort based on given property
-function sortByProperty(property){
-    return function(a,b){
-      try{
-        if(a[prop]>b[prop])
-         {return 1}
-        else if(a[prop]<b[prop])
-         {return -1}
-      }catch(e){}
-      return 0
+   function removeAllChildNodes(parent) {
+      while (parent.firstChild) {
+          parent.removeChild(parent.firstChild);
+      }
     }
-}
+    removeAllChildNodes(document.getElementById('transactions'))
 
+    if(search_string.trim().length != 0)
+     {
+       console.log(search_string);
+     }
+     else{
+       //
+     }
+
+}
 
 //getUserObj
-function getObj(){
+window.onload = function getObj(){
   // Create a request variable and assign a new XMLHttpRequest object to it.
   var request = new XMLHttpRequest()
   let email = document.getElementById('email').innerHTML.trim();
@@ -77,4 +78,3 @@ function getObj(){
   // Send request
   request.send({"email":email});
 }
-getObj();

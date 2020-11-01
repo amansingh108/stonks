@@ -117,24 +117,15 @@ const addFav = (email,company,callback)=>{
       db = db_client.db('webster')
 
       var searchQuery = {"email":email}
-      var updateQuery = {
-        $push:{
-          fav:company
-        }
-      }
+      var updateQuery = {$pull:{ fav:company }}
 
-      var options = { returnNewDocument : true};
+      mongoUpdate(searchQuery,updateQuery,(err,res)=>{
+        if(err)
+         return callback(err)
 
-      db.collection('user_data').findOneAndUpdate(searchQuery,updateQuery,options)
-       .then((updatedDocument)=>{
-         if(updatedDocument)
-          callback(null,updatedDocument);
-         else
-          callback(Error("no matching document found"));
-       })
-        .catch(err => callback(Error("failed to find and update document")))
-
-
+         updateQuery = {$push:{ fav:company }}
+        mongoUpdate(searchQuery,updateQuery,callback)
+      })
     })
     .catch((err)=>{
       callback(err)
@@ -148,18 +139,10 @@ const removeFav = (email,company,callback) =>{
       db = db_client.db('webster')
 
       var searchQuery = {"email":email} //searching by mail
-      var updateQuery =
-        {
-          $pull :{fav:company}
-        }
+      var updateQuery = {  $pull :{fav:company}}
 
       //running the query here
-      db.collection('user_data').update(searchQuery,updateQuery)
-       .then((report)=>{
-          callback(null,report);
-       })
-       .catch(err => callback(Error("failed to update document")))
-
+      mongoUpdate(searchQuery,updateQuery,callback)
     })
     .catch((err)=>{
       callback(err)

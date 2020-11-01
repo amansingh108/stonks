@@ -58,10 +58,12 @@ function sendFavRequest(requestObj){
   request.open('POST', `http://localhost:5000/fav`, true)
   request.setRequestHeader('content-type','application/json')
 
-  request.onload = function () {
-    var data = JSON.parse(this.response);
-    console.log(data);
-    checkFav()
+  request.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200){
+      var data = JSON.parse(this.response);
+      console.log(data);
+      checkFav()
+    }
   }
   console.log('request',JSON.stringify(requestObj));
   // Send request
