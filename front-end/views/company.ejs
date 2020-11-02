@@ -6,6 +6,15 @@
   <div class="email hidden" id="email"> <%= email%>     </div>
 </div>
 
+<br>
+<div class="" id="fund-container">
+  <div id="funds"></div>
+  <button onclick="hideFund()">Hide</button>
+</div>
+<button onclick="showFund()" id="fund-button">Funds</button>
+</div>
+
+<br>
 <!-- company header -->
 <div class="head" id="company-name">
   <%= company %>
@@ -67,6 +76,10 @@
 <!-- Chart canvas -->
 <div class="" id="chart-container">
   <canvas id="chart" width="300" height="300"></canvas>
+  <select class="" id="graph-type">
+    <option value="line">Line</option>
+    <option value="bar">Bar</option>
+  </select>
 </div>
 <br>
 

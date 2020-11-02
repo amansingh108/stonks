@@ -20,7 +20,7 @@ window.onload = function(){
 
   counter = 0
   //set limit of visible graph points
-  limit = 5
+  limit = 15
   draw_chart([],[],(chart)=>{
     //fetchSSEData
     var ev = new EventSource(`/live/${company}`);
@@ -77,8 +77,14 @@ function draw_chart(labels,data,callback){
                     beginAtZero: false
                 }
             }]
+        },
+        elements: {
+            line: {
+                tension: 0 // disables bezier curves
+            }
         }
     }
+
   });
 
   // Access chart from here

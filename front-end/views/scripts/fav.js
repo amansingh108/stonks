@@ -1,3 +1,13 @@
+function showFund(){
+  document.getElementById('fund-container').style.display = 'inline'
+  document.getElementById('fund-button').style.display = 'none'
+}
+
+function hideFund(){
+  document.getElementById('fund-container').style.display = 'none'
+  document.getElementById('fund-button').style.display = 'inline'
+}
+
 // url to profile
 let profileUrl = `http://localhost:5000/profile`
 

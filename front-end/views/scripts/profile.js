@@ -1,4 +1,14 @@
-//update funds
+function showFund(){
+  document.getElementById('fund-container').style.display = 'inline'
+  document.getElementById('fund-button').style.display = 'none'
+}
+
+function hideFund(){
+  document.getElementById('fund-container').style.display = 'none'
+  document.getElementById('fund-button').style.display = 'inline'
+}
+
+//get user obj
 function getObj(){
   // Create a request variable and assign a new XMLHttpRequest object to it.
   var request = new XMLHttpRequest()
@@ -8,14 +18,12 @@ function getObj(){
 
   request.onload = function () {
     var data = JSON.parse(this.response);
-    console.log(data);
-    //display funds
     document.getElementById('funds').innerHTML = data.data.funds;
   }
   // Send request
   request.send({"email":email});
 }
-getObj();
+
 
 function browseRedirect(){window.location.href = browseLink}
 function holdingRedirect(){window.location.href = holdingLink }
@@ -32,3 +40,8 @@ document.getElementById('browse').addEventListener('click',browseRedirect)
 document.getElementById('holdings').addEventListener('click',holdingRedirect)
 document.getElementById('fav').addEventListener('click',favRedirect)
 document.getElementById('transactions').addEventListener('click',transactionRedirect)
+
+window.onload = function(){
+  getObj()
+  hideFund()
+}

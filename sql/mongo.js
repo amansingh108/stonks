@@ -6,8 +6,6 @@ const client = new MongoClient(url,{ useNewUrlParser: true, useUnifiedTopology: 
 let getdb = () => client.connect();
 dbPromise = getdb();    //global db promise
 
-
-
 const insert = (obj,collection,callback) =>{
   dbPromise
       .then((db_client)=>{
@@ -25,6 +23,18 @@ const insert = (obj,collection,callback) =>{
           .catch(err => callback(err))
 
 
+      })
+      .catch((err)=>{
+        callback(err)
+      })
+}
+
+
+const getAll = (collection,callback) => {
+  dbPromise
+      .then((db_client)=>{
+        db = db_client.db(collection)
+        db.collection('user_data').find().toArray(callback)
       })
       .catch((err)=>{
         callback(err)

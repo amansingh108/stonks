@@ -1,3 +1,13 @@
+function showFund(){
+  document.getElementById('fund-container').style.display = 'inline'
+  document.getElementById('fund-button').style.display = 'none'
+}
+
+function hideFund(){
+  document.getElementById('fund-container').style.display = 'none'
+  document.getElementById('fund-button').style.display = 'inline'
+}
+
 //link to profile
 let profileUrl = `http://localhost:5000/profile`
 //fav request link
@@ -77,7 +87,7 @@ function setHoldings(holdings){
 
      let date = document.createElement('div')
      date.className = 'info-text date'
-     date.innerHTML = holding.date
+     date.innerHTML = holding.date.substring(0, 10)
 
 
      holding_card.appendChild(code)
@@ -87,6 +97,8 @@ function setHoldings(holdings){
 
      //create a hidden form for selling
      var form = document.createElement('form');
+     form.style.visibility = 'hidden'
+     form.style.display = 'none'
 
      //stake input
      var stake_input = document.createElement("input");
@@ -114,12 +126,31 @@ function setHoldings(holdings){
        parseRequest(holding_obj,parseFloat(input_sellingStake))
      })
 
+     //cancel button
+     var close = document.createElement("div")
+     close.innerHTML = 'Close'
+     close.addEventListener('click',function(e){
+       e.target.parentNode.nextSibling.style.visibility = 'visible'
+       e.target.parentNode.style.display = 'none'
+     })
+
      form.appendChild(stake_input)
      form.appendChild(error_message)
      form.appendChild(button)
+     form.appendChild(close)
 
      //add form to holding_card
      holding_card.appendChild(form)
+
+     let buy_button = document.createElement('button')
+     buy_button.innerHTML = 'Sell'
+     buy_button.addEventListener('click',function(e){
+       e.target.previousSibling.style.visibility = 'visible'
+       e.target.previousSibling.style.display = 'inline'
+       e.target.style.visibility = 'hidden'
+     })
+
+     holding_card.appendChild(buy_button)
 
      //for visual clarity
      let br = document.createElement('br')
