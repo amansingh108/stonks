@@ -1,2 +1,2 @@
 # stonks
-A Node.js based Virtual Stock Market simulator
+A node js based Virtual Stock Market simulator. 
